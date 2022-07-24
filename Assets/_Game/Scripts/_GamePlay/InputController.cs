@@ -41,7 +41,6 @@ public class InputController : MonoBehaviour
         if (startTouching && Input.GetMouseButton(0))
         {
             ray = cam.ScreenPointToRay(Input.mousePosition);
-            print("guguh");
             DoformMesh();
         }
 

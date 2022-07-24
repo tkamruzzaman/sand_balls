@@ -10,8 +10,6 @@ public class UIMainMenu : MonoBehaviour
 
     [Header("Settings Panel")]
     [SerializeField] private RectTransform m_SettingsRect;
-    //[SerializeField] private Button m_AudioButton;
-    //[SerializeField] private Button m_VibrationButton;
     [SerializeField] private Button m_SettingsCloseButton;
 
     private void Awake()
@@ -19,8 +17,6 @@ public class UIMainMenu : MonoBehaviour
         m_PlayButton.onClick.AddListener(() => { PlayButtonAction(); });
         m_SettingsButton.onClick.AddListener(() => { SettingsButtonAction(); });
 
-        //m_AudioButton.onClick.AddListener(() => { AudioButtonAction(); });
-        //m_VibrationButton.onClick.AddListener(() => { VibrationButtonAction(); });
         m_SettingsCloseButton.onClick.AddListener(() => { SettingsCloseButtonAction(); });
 
         SettingsPanelStatus(false);
@@ -35,16 +31,6 @@ public class UIMainMenu : MonoBehaviour
     {
         SettingsPanelStatus(true);
     }
-
-    //private void AudioButtonAction()
-    //{
-    //    GameService.Instance.SoundManager.ToggleSound();
-    //}
-
-    //private void VibrationButtonAction()
-    //{
-    //    GameService.Instance.VibrationManager.ToggleVibration();
-    //}
 
     private void SettingsCloseButtonAction()
     {
