@@ -19,8 +19,11 @@ namespace Service
         //Vibration
         internal static Action OnVibrationToggled = delegate { };
 
-        //GameController
+        //GameManager
         public static Action OnGameStart = delegate { };
         public static Action<bool> OnGameEnd = delegate { };
+
+        //LevelController
+        public static Action OnLevelSpawned = delegate { };
     }
 }

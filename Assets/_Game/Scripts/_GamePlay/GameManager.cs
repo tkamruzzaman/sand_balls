@@ -1,62 +1,90 @@
-﻿using System;
+﻿using Service;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    // public varaibles
-    public Balls[] startBalls;
-    public Transform[] holesTomake;
-    public float radius;
-    public InputController cam;
-    public List<Balls> activeBalls;
-    public GameObject endScreen;
-    public Animator animator;
+    internal static bool isInGamePlay;
+    internal static bool isToRetryLevel;
+    internal static bool isInGameOver;
 
-   [SerializeField] private InputController input;
+    [SerializeField] private LevelController m_LevelController;
 
-    // private varaibles
+    public List<Ball> activeBalls;
 
-    // Start is called before the first frame update
-    void Start()
+    [Range(0.25f, 2.0f)] public float radiusOfDeformation = 0.7f;
+    [Range(1.5f, 3.0f)] public float powerOfDeformation = 2.0f;
+    public GameObject circlePrefab;
+    public bool isToAddCircle;
+
+    public int finalStagedBallCount;
+
+    private void Awake()
     {
-        input = FindObjectOfType<InputController>();
-
-        foreach (Balls ball in startBalls)
-        {
-            ball.TransitionToState(ball.activeState);
-        }
-
-        foreach (Transform tf in holesTomake)
-        {
-            //cam.defromToHoles(tf.position, radius);
-            input.DefromToHoles(tf.position, radius);
-        }
+        DoReset();
     }
 
-    public void showGameOver()
+    private void DoReset()
     {
-        animator.SetTrigger("GameEnded");
+        Time.timeScale = 1;
+
+        isInGamePlay = false;
+        isInGameOver = false;
+        isToRetryLevel = false;
+
+        DoPlay();
     }
 
-    internal void startGame()
+    public void DoPlay()
     {
-        animator.SetTrigger("StartGame");
+        if (isInGamePlay) { return; }
+
+        isInGamePlay = true;
+
+        m_LevelController.LoadLevel();
+
+        GameEvents.OnGameStart?.Invoke();
     }
 
-    internal void showNextButton()
+    public void DoGameOver(bool status)
     {
-        animator.SetTrigger("ShowNext");
+        //Debug.Log("DoGameOver 1  " + status);
+        if (isInGameOver) { return; }
+
+        isToRetryLevel = !status;
+
+        //Debug.Log("DoGameOver 2  " + status);
+
+        isInGamePlay = false;
+        isInGameOver = true;
+
+        m_LevelController.IsLevelSucceed = status;
+
+        //uiController.ShowGameOverUI();
+
+        m_LevelController.CheckToUnlockLevel(status);
+
+        GameEvents.OnGameEnd?.Invoke(status);
     }
 
-    internal void restartGame()
+    public void DoPause()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Time.timeScale = 0;
     }
 
-    public void endGame()
+    public void DoResume()
     {
-        throw new NotImplementedException();
+        Time.timeScale = 1;
     }
+
+    public void DoReplay()
+    {
+        GameService.Instance.Navigation.LoadScene(Scenes.GamePlay);
+    }
+
+    public void MainMenu()
+    {
+        GameService.Instance.Navigation.LoadScene(Scenes.MainMenu);
+    }
+
 }

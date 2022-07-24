@@ -2,88 +2,37 @@
 
 public class InputController : MonoBehaviour
 {
-    // public references
-    public GameObject cylinderPrefab;
-    public float planeDistance;
-    public GameObject board;
+    [Range(30, 70)] public float planeDistance;
 
+    private Camera m_mainCamera;
 
-    // private references
-    private PlaneDeformer[] sandPlanes;
-    private Vector3[] planeCenters;
-    private Ray ray;
-    private RaycastHit hit;
-    [SerializeField] private Camera cam;
-    private bool startTouching;
+    private bool m_CanReadInput;
+    private LevelController m_LevelController;
+    private Level m_CurrentLevel;
 
-    private void Awake()
+    private void Awake() => m_CanReadInput = false;
+
+    private void OnEnable() => Service.GameEvents.OnLevelSpawned += ReadyForInput;
+
+    private void OnDisable() => Service.GameEvents.OnLevelSpawned -= ReadyForInput;
+
+    private void ReadyForInput() => m_CanReadInput = true;
+
+    private void Start()
     {
-        //cam = this.transform.GetComponent<Camera>();
-        sandPlanes = board.GetComponentsInChildren<PlaneDeformer>();
-        planeCenters = new Vector3[sandPlanes.Length];
-        for (int i = 0; i < planeCenters.Length; i++)
-        {
-            planeCenters[i] = sandPlanes[i].gameObject.transform.GetComponent<Renderer>().bounds.center;
-        }
-        startTouching = false;
-
-
-        startTouching = true;
+        m_mainCamera = FindObjectOfType<Camera>();
+        m_LevelController = FindObjectOfType<LevelController>();
+        m_CurrentLevel = m_LevelController.GetCurrentLevel();
     }
-
-    //private void Update()
-    //{
-    //    startTouching = !StartScreen.activeSelf;
-    //}
 
     private void FixedUpdate()
     {
-        if (startTouching && Input.GetMouseButton(0))
+        if (m_CanReadInput && Input.GetMouseButton(0))
         {
-            ray = cam.ScreenPointToRay(Input.mousePosition);
-            DoformMesh();
-        }
-
-        //     if (startTouching && Input.touchCount > 0)
-        //     {
-        //         foreach (Touch touch in Input.touches)
-        //         {
-        //             ray = cam.ScreenPointToRay(touch.position);
-        //             doformMesh();
-        //         }
-        //     }
-    }
-
-
-    private void DoformMesh()
-    {
-        if (Physics.Raycast(ray, out hit))
-        {
-            // sandPlanes.deformThePlane(hit.point);
-            // check the distance of all hit distances
-            for (int i = 0; i < planeCenters.Length; i++)
+            Ray ray = m_mainCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                if ((planeCenters[i] - hit.point).sqrMagnitude < planeDistance)
-                {
-                    // deform this planes area;
-                    sandPlanes[i].DeformThePlane(hit.point);
-                }
-            }
-            if (hit.transform.CompareTag("Ring"))
-            {
-                Destroy(hit.transform.gameObject);
-            }
-        }
-    }
-
-    public void DefromToHoles(Vector3 position, float radius)
-    {
-        for (int i = 0; i < planeCenters.Length; i++)
-        {
-            if ((planeCenters[i] - position).sqrMagnitude < planeDistance)
-            {
-                // deform this planes area;
-                sandPlanes[i].Puthole(position, radius);
+                m_CurrentLevel.DoformMesh(hit, planeDistance);
             }
         }
     }

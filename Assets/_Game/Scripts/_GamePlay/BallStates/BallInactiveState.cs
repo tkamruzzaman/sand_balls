@@ -2,17 +2,19 @@
 
 public class BallInactiveState : BallBaseState
 {
-    public override void EnterState(Balls ball)
+    public override void EnterState(Ball ball)
     {
-        ball.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+        ball.ballRenderer.material.SetColor("_Color", Color.white);
+
+        ball.ballRigidbody.useGravity = false;
+        ball.ballRigidbody.isKinematic = true;
     }
 
-    public override void OnCollisionEnter(Balls ball, Collision collision)
+    public override void OnCollisionEnter(Ball ball, Collision collision)
     {
         if (collision.collider.CompareTag("Active"))
         {
             ball.TransitionToState(ball.activeState);
         }
     }
-
 }

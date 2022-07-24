@@ -89,6 +89,10 @@ PrefabInstance:
       value: Sand
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 067c9a0bc00a08f47842ceb89cf8c5b1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 067c9a0bc00a08f47842ceb89cf8c5b1, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -130,9 +134,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f971b8d81594e4e8a41002a6d09670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radiusOfDeformation: 0.7
-  powerOfDeformation: 2
-  cylinderPrefab: {fileID: 5485050802616954802, guid: ceb9f1325c26f20428227f238c82ca0b, type: 3}
 --- !u!1001 &6120505229723452140
 PrefabInstance:
   m_ObjectHideFlags: 0
