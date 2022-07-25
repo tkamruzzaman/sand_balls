@@ -3,12 +3,16 @@ using UnityEngine;
 public class FinalStageTrigger : MonoBehaviour
 {
     private GameManager m_GameManager;
+    private LevelController m_LevelController;
+    private UIController m_UIController;
 
     [SerializeField] private ParticleSystem m_ConfettiPS;
 
     private void Start()
     {
         m_GameManager = FindObjectOfType<GameManager>();
+        m_LevelController = FindObjectOfType<LevelController>();
+        m_UIController = FindObjectOfType<UIController>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -21,7 +25,13 @@ public class FinalStageTrigger : MonoBehaviour
 
         ball.isEnteredFinalStage = true;
 
-        m_GameManager.finalStagedBallCount++;
+        m_LevelController.FinalStagedBallCount++;
+
+        if (m_LevelController.IsPassedResultThreshold()) 
+        {
+            GameManager.isPassedThreshold = true;
+            m_UIController.ShowGameResultButtons();
+        }
 
         if (!m_ConfettiPS.isPlaying)
         {

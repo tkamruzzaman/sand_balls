@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelController : MonoBehaviour
@@ -8,12 +6,16 @@ public class LevelController : MonoBehaviour
 
     public string currentLevelName;
 
-    private int maxLevelCount ;
+    private int maxLevelCount;
 
     private static int lastLevelIndex;
 
     public bool IsLevelSucceed { get; set; }
     public bool IsPlayingRandomLevel { get; set; }
+
+    private int m_FinalStagedBallCount;
+
+    public int FinalStagedBallCount { get => m_FinalStagedBallCount; set => m_FinalStagedBallCount = value; }
 
     [Header("Debug Level")]
     public int debugLevel = -1;
@@ -23,7 +25,8 @@ public class LevelController : MonoBehaviour
 
     private const string KEY_LEVEL = "key_level";
 
-    [SerializeField]private GameObject[] levels;
+    [SerializeField] private GameObject[] levels;
+
 
     private void Start()
     {
@@ -74,12 +77,8 @@ public class LevelController : MonoBehaviour
     public Level GetCurrentLevel() => m_CurrentLevel;
     public void SetCurrentLevel(Level level) => m_CurrentLevel = level;
 
-    public int GetCurrentLevelIndex() {
-        return PlayerPrefs.GetInt(KEY_LEVEL, 0);
-    }
-    private void SetCurrentLevelIndex(int value) {
-        PlayerPrefs.SetInt(KEY_LEVEL, value);
-    }
+    public int GetCurrentLevelIndex() => PlayerPrefs.GetInt(KEY_LEVEL, 1);
+    private void SetCurrentLevelIndex(int value) => PlayerPrefs.SetInt(KEY_LEVEL, value);
 
     public void CheckToUnlockLevel(bool winStatus, bool isSkipedLevelWithAd = false)
     {
@@ -101,24 +100,30 @@ public class LevelController : MonoBehaviour
 
     public int CalculateLevelStar()
     {
-        int before = 10; // Controller.self.levelController.playersBeforeGame;
-        int after = 10; // Controller.self.playerController.selfPlayers.Count;
+        int star = 0;
+        float successRate = 0;
+        try
+        {
+            successRate = FinalStagedBallCount / (float)GetCurrentLevel().TotalBalls;
+        }
+        catch { }
 
-        float v = after / (float)before;
+        print("success rate: " + successRate);
+        print("FinalStagedBallCount: " + FinalStagedBallCount);
+        print("TotalBalls: " + GetCurrentLevel().TotalBalls);
 
-        int star;
-        if (v > 0.5f) { star = 3; }
-        else if (v > 0.2f && v <= 0.5f) { star = 2; }
-        else { star = 1; }
+        if (successRate >= 0.67f) { star = 3; }
+        else if (successRate >= 0.34f && successRate < 0.67f) { star = 2; }
+        else if (successRate < 0.34f) { star = 1; }
 
         return star;
     }
 
     public int CalculateLevelFinalProgress()
     {
-        int before = 10;// m_EnemyController.StartEnemyCount;
+        int before = GetCurrentLevel().TotalBalls;
 
-        int after = 10;// m_EnemyController.ActiveEnemyCount;
+        int after = FinalStagedBallCount;
 
         int remaining = before - after;
 
@@ -140,5 +145,22 @@ public class LevelController : MonoBehaviour
         //    (m_EnemyController.StartEnemyCount - m_EnemyController.ActiveEnemyCount)
         //    / (float)m_EnemyController.StartEnemyCount);
         //Controller.self.uiController.gamePlayUI.UpdateProgressBar(fillAmount);
+    }
+
+    public bool IsPassedResultThreshold()
+    {
+        int total = GetCurrentLevel().TotalBalls;
+        int passingThreshold = 10;
+        try
+        {
+             passingThreshold = total / 3;
+        }
+        catch { }
+
+        if(FinalStagedBallCount > passingThreshold)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -8,6 +8,10 @@ public class Level : MonoBehaviour
     [SerializeField] private PlaneDeformer[] sandPlanes;
     [SerializeField] private Vector3[] planeCenters;
 
+    private int m_TotalBalls;
+
+    public int TotalBalls { get => m_TotalBalls; private set => m_TotalBalls = value; }
+
     private void Awake()
     {
         sandPlanes = GetComponentsInChildren<PlaneDeformer>();
@@ -16,6 +20,8 @@ public class Level : MonoBehaviour
         {
             planeCenters[i] = sandPlanes[i].gameObject.transform.GetComponent<Renderer>().bounds.center;
         }
+
+        m_TotalBalls =  GetComponentsInChildren<Ball>().Length;
     }
 
     private void Start()

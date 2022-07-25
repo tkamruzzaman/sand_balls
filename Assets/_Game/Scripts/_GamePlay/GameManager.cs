@@ -7,8 +7,10 @@ public class GameManager : MonoBehaviour
     internal static bool isInGamePlay;
     internal static bool isToRetryLevel;
     internal static bool isInGameOver;
+    internal static bool isPassedThreshold;
 
     [SerializeField] private LevelController m_LevelController;
+    [SerializeField] private UIController m_UIController;
 
     public List<Ball> activeBalls;
 
@@ -16,8 +18,6 @@ public class GameManager : MonoBehaviour
     [Range(1.5f, 3.0f)] public float powerOfDeformation = 2.0f;
     public GameObject circlePrefab;
     public bool isToAddCircle;
-
-    public int finalStagedBallCount;
 
     private void Awake()
     {
@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
         isInGamePlay = false;
         isInGameOver = false;
         isToRetryLevel = false;
+        isPassedThreshold = false;
 
         DoPlay();
     }
@@ -60,7 +61,7 @@ public class GameManager : MonoBehaviour
 
         m_LevelController.IsLevelSucceed = status;
 
-        //uiController.ShowGameOverUI();
+        m_UIController.ShowGameOverUI();
 
         m_LevelController.CheckToUnlockLevel(status);
 

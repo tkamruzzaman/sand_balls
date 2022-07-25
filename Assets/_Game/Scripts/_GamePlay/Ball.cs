@@ -33,7 +33,6 @@ public class Ball : MonoBehaviour
 
     public void TransitionToState(BallBaseState state)
     {
-        Debug.Log("dddddddddddddddddddd: " + state);
         m_CurrentState = state;
         m_CurrentState.EnterState(this);
     }
