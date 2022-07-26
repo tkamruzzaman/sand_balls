@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
+using Service;
 
 public class BallActiveState : BallBaseState
 {
-    private Color[] activeColors = { Color.red, Color.blue, Color.green, Color.magenta, Color.yellow };
-
     public override void EnterState(Ball ball)
     {
-        // change of color
-        ball.ballRenderer.material.SetColor("_Color", activeColors[Random.Range(0, activeColors.Length)]);
+        ball.SetRandomColor();
 
         ball.ballRigidbody.useGravity = true;
         ball.ballRigidbody.isKinematic = false;
@@ -18,5 +16,9 @@ public class BallActiveState : BallBaseState
 
     public override void OnCollisionEnter(Ball ball, Collision collision)
     {
+        if (collision.gameObject.layer != PhysicsLayers.Obstacle) { return; }
+
+        GameService.Instance.SoundManager.PlaySound(GameService.Instance.SoundManager.ballAudioClip);
+        GameService.Instance.VibrationManager.HapticMedium();
     }
 }

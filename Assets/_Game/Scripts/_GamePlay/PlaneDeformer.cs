@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Service;
+using UnityEngine;
 
 public class PlaneDeformer : MonoBehaviour
 {
@@ -45,6 +46,9 @@ public class PlaneDeformer : MonoBehaviour
         {
             m_Mesh.vertices = m_Verts;
             m_MeshCollider.sharedMesh = m_Mesh;
+
+            GameService.Instance.SoundManager.PlaySound(GameService.Instance.SoundManager.sandAudioClip, 0.25f);
+            GameService.Instance.VibrationManager.HapticLight();
 
             if (m_GameManager.isToAddCircle)
             {

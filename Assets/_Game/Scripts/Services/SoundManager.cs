@@ -14,19 +14,15 @@ namespace Service
 
         [Space]
         [Header("UI Audio")]
-        public AudioSource button;
-        public AudioSource win;
-        public AudioSource lost;
-        public AudioSource celebrate;
-        public AudioSource point;
-        public AudioSource coinEffect;
-
+        public AudioClip buttonAudioClip;
+        public AudioClip winAudioClip;
+        public AudioClip celebrateAudioClip;
+    
         [Space]
         [Header("Game Audio")]
-        public AudioClip hitClip;
-        public AudioClip hitByArrowClip;
-        public AudioClip arrowClip;
-        public AudioClip glassBreakClip;
+        public AudioClip ballAudioClip;
+        public AudioClip sandAudioClip;
+        public AudioClip coinAudioClip;
 
         public static bool isSoundOn;
 
@@ -35,33 +31,52 @@ namespace Service
 
         private const string KEY_SOUND = "key_sound";
 
+        [Space]
+        [SerializeField] private AudioSource m_MusicAudioSource;
+        [SerializeField] private AudioSource m_SFXAudioSource;
+
         private void Awake()
         {
             isSoundOn = (PlayerPrefs.GetInt(KEY_SOUND) == SOUND_ON_STATE);
+
+        }
+        void Start()
+        {
+            CheckBackgroundMusic();
         }
 
-        public void PlaySound(AudioSource audio)
+        void CheckBackgroundMusic()
         {
-            if (isSoundOn && audio != null)
+            if (isSoundOn)
             {
-                audio.pitch = 1;
-                audio.Play();
+                m_MusicAudioSource.Stop();
+                m_MusicAudioSource.Play();
+            }
+            else
+            {
+                m_MusicAudioSource.Stop();
             }
         }
 
-        public void PlaySound(AudioSource audio, AudioClip clip)
+        public void PlaySound(AudioClip audioClip, float volume = 1.0f)
         {
-            if (isSoundOn && audio != null)
+            if (isSoundOn && audioClip != null)
             {
-                audio.clip = clip;
-                audio.pitch = 1;
-                audio.Play();
+                m_SFXAudioSource.PlayOneShot(audioClip, volume);
+            }
+        }
+
+        public void PlaySound(AudioSource audioSource)
+        {
+            if (isSoundOn && audioSource != null)
+            {
+                audioSource.Play();
             }
         }
 
         public void PlayButtonSound()
         {
-            PlaySound(button);
+            PlaySound(buttonAudioClip);
         }
 
         public void ChangePitch(AudioSource source, float pitch, float duration)
@@ -86,6 +101,7 @@ namespace Service
                 isSoundOn = true;
                 PlayerPrefs.SetInt(KEY_SOUND, SOUND_ON_STATE);
             }
+            CheckBackgroundMusic();
             GameEvents.OnSoundToggled?.Invoke();
         }
     }

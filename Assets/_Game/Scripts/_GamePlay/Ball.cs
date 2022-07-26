@@ -2,9 +2,13 @@
 
 public class Ball : MonoBehaviour
 {
+    [SerializeField] private Color[] m_ActiveColors;
+
     [HideInInspector] public GameManager gameManager;
 
-    [HideInInspector] public Renderer ballRenderer;
+    private Renderer ballRenderer;
+    private TrailRenderer ballTailRenderer;
+
     [HideInInspector] public Rigidbody ballRigidbody;
 
     private BallBaseState m_CurrentState;
@@ -17,10 +21,11 @@ public class Ball : MonoBehaviour
 
     private void Awake()
     {
-        float randomSize = Random.Range(0.35f, 0.75f);
+        float randomSize = Random.Range(0.4f, 0.75f);
         transform.localScale = new Vector3(randomSize, randomSize, randomSize);
         ballRenderer = GetComponent<Renderer>();
         ballRigidbody = GetComponent<Rigidbody>();
+        ballTailRenderer = GetComponentInChildren<TrailRenderer>();
         TransitionToState(inactiveState);
 
         if (gameManager == null) { gameManager = FindObjectOfType<GameManager>(); }
@@ -40,5 +45,18 @@ public class Ball : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         m_CurrentState.OnCollisionEnter(this, collision);
+    }
+
+    public void SetRandomColor()
+    {
+        Color color = m_ActiveColors[Random.Range(0, m_ActiveColors.Length)];
+        ballRenderer.material.SetColor("_Color", color);
+        ballTailRenderer.material.SetColor("_Color", color);
+    }
+
+    public void SetWhiteColor()
+    {
+        ballRenderer.material.SetColor("_Color", Color.white);
+        ballTailRenderer.material.SetColor("_Color", Color.white);
     }
 }

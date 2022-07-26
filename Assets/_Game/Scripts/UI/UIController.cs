@@ -1,3 +1,4 @@
+using Service;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -118,13 +119,16 @@ public class UIController : MonoBehaviour
     private IEnumerator IE_ShowStar()
     {
         int star = m_LevelController.CalculateLevelStar();
-        print("star:      "  + star);
+
         for (int i = 0; i < star; i++)
         {
             yield return StartCoroutine(ZoomTo(stars[i], new Vector3(1.5f, 1.5f, 1.5f), 0.2f));
             yield return StartCoroutine(ZoomTo(stars[i], Vector3.one, 0.2f));
             yield return waitForPointTwo;
         }
+
+        GameService.Instance.SoundManager.PlaySound(GameService.Instance.SoundManager.celebrateAudioClip);
+        GameService.Instance.VibrationManager.HapticSuccess();
     }
 
     public static IEnumerator ZoomTo(GameObject gameObject, Vector3 scale, float duration)

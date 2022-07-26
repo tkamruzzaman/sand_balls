@@ -1,4 +1,5 @@
 using UnityEngine;
+using Service;
 
 public class FinalStageTrigger : MonoBehaviour
 {
@@ -37,5 +38,8 @@ public class FinalStageTrigger : MonoBehaviour
         {
             m_ConfettiPS.Play();
         }
+
+        GameService.Instance.SoundManager.PlaySound(GameService.Instance.SoundManager.winAudioClip, 0.5f);
+        GameService.Instance.VibrationManager.HapticMedium();
     }
 }
