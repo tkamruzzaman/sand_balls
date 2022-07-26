@@ -673,6 +673,7 @@ MonoBehaviour:
   radius: 1.5
   sandPlanes: []
   planeCenters: []
+  m_RightBarrierCollider: {fileID: 6784650940628768176}
 --- !u!1 &6784650939645886632
 GameObject:
   m_ObjectHideFlags: 0

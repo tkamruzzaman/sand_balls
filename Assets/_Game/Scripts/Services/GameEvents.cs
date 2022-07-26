@@ -25,5 +25,8 @@ namespace Service
 
         //LevelController
         public static Action OnLevelSpawned = delegate { };
+
+        //Result Next Button
+        public static Action OnPressedResultNextButton = delegate { };
     }
 }

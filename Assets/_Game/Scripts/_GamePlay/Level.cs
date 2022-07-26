@@ -12,6 +12,8 @@ public class Level : MonoBehaviour
 
     public int TotalBalls { get => m_TotalBalls; private set => m_TotalBalls = value; }
 
+    [SerializeField] private Collider m_RightBarrierCollider;
+
     private void Awake()
     {
         sandPlanes = GetComponentsInChildren<PlaneDeformer>();
@@ -21,7 +23,7 @@ public class Level : MonoBehaviour
             planeCenters[i] = sandPlanes[i].gameObject.transform.GetComponent<Renderer>().bounds.center;
         }
 
-        m_TotalBalls =  GetComponentsInChildren<Ball>().Length;
+        m_TotalBalls = GetComponentsInChildren<Ball>().Length;
     }
 
     private void Start()
@@ -67,5 +69,11 @@ public class Level : MonoBehaviour
             }
         }
     }
+
+    private void OnEnable() => Service.GameEvents.OnPressedResultNextButton += DisableBarrier;
+
+    private void OnDisable() => Service.GameEvents.OnPressedResultNextButton -= DisableBarrier;
+
+    private void DisableBarrier() => m_RightBarrierCollider.enabled = false;
 
 }

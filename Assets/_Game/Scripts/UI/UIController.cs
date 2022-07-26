@@ -40,7 +40,7 @@ public class UIController : MonoBehaviour
         m_PauseCloseButton.onClick.AddListener(() => { ResumeButtonAction(); });
 
         m_ResultRestartButton.onClick.AddListener(() => { RestartButtonAction(); });
-        m_ResultNextButton.onClick.AddListener(() => { m_GameManager.DoGameOver(true); });
+        m_ResultNextButton.onClick.AddListener(() => { Service.GameEvents.OnPressedResultNextButton?.Invoke(); /*m_GameManager.DoGameOver(true);*/ });
         m_GameOverNextButton.onClick.AddListener(() => { RestartButtonAction(); });
 
         GamePlayPanelStatus(true);

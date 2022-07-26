@@ -2,7 +2,7 @@
 
 public class Ball : MonoBehaviour
 {
-    public GameManager gameManager;
+    [HideInInspector] public GameManager gameManager;
 
     [HideInInspector] public Renderer ballRenderer;
     [HideInInspector] public Rigidbody ballRigidbody;
