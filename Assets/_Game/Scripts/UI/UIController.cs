@@ -14,6 +14,7 @@ public class UIController : MonoBehaviour
 
     [SerializeField] private Button m_RestartButton;
     [SerializeField] private Button m_PauseButton;
+    [SerializeField] private Button m_HomeButton;
     [SerializeField] private Button m_ResumeButton;
     [SerializeField] private Button m_PauseCloseButton;
 
@@ -37,11 +38,12 @@ public class UIController : MonoBehaviour
     {
         m_RestartButton.onClick.AddListener(() => { RestartButtonAction(); });
         m_PauseButton.onClick.AddListener(() => { PauseButtonAction(); });
+        m_HomeButton.onClick.AddListener(() => { HomeButtonAction(); });
         m_ResumeButton.onClick.AddListener(() => { ResumeButtonAction(); });
         m_PauseCloseButton.onClick.AddListener(() => { ResumeButtonAction(); });
 
         m_ResultRestartButton.onClick.AddListener(() => { RestartButtonAction(); });
-        m_ResultNextButton.onClick.AddListener(() => { Service.GameEvents.OnPressedResultNextButton?.Invoke(); /*m_GameManager.DoGameOver(true);*/ });
+        m_ResultNextButton.onClick.AddListener(() => { GameEvents.OnPressedResultNextButton?.Invoke(); });
         m_GameOverNextButton.onClick.AddListener(() => { RestartButtonAction(); });
 
         GamePlayPanelStatus(true);
@@ -74,6 +76,10 @@ public class UIController : MonoBehaviour
     {
         m_GameManager.DoPause();
         PausePanelStatus(true);
+    }
+    private void HomeButtonAction()
+    {
+        m_GameManager.MainMenu();
     }
     private void ResumeButtonAction()
     {

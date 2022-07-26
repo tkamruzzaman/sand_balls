@@ -29,7 +29,7 @@ public class UIButtonAnimation : MonoBehaviour, IPointerDownHandler, IPointerUpH
         {
             rect.DOScale(initialScale * percentage, duration).SetEase(Ease.OutQuad).SetUpdate(true);
             Service.GameService.Instance.SoundManager.PlayButtonSound();
-            Service.GameService.Instance.VibrationManager.HapticLight();
+            Service.GameService.Instance.VibrationManager.HapticSelection();
         }
     }
 

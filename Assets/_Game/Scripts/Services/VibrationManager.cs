@@ -25,6 +25,16 @@ namespace Service
             isVibrationOn = (PlayerPrefs.GetInt(KEY_VIBRATION) == VIBRATION_ON_STATE);
         }
 
+        public void HapticSelection()
+        {
+            TriggerVibration(HapticTypes.Selection);
+        }
+
+        public void HapticSoft()
+        {
+            TriggerVibration(HapticTypes.SoftImpact);
+        }
+
         public void HapticLight()
         {
             TriggerVibration(HapticTypes.LightImpact);
@@ -57,7 +67,7 @@ namespace Service
 #if UNITY_IOS
         if(MMVibrationManager.HapticsSupported())
 #endif
-                MMVibrationManager.Haptic(hapticType);
+                MMVibrationManager.Haptic(hapticType, true, false, this);
             }
         }
 

@@ -6,7 +6,7 @@ public class LevelController : MonoBehaviour
 
     public string currentLevelName;
 
-    private int maxLevelCount;
+    private int maxLevelCount = 5;
 
     private static int lastLevelIndex;
 
@@ -36,7 +36,9 @@ public class LevelController : MonoBehaviour
     public void LoadLevel()
     {
         int levelIndex = GetCurrentLevelIndex();
-        Debug.Log("levelIndex: " + levelIndex);
+
+        //Debug.Log("levelIndex: " + levelIndex);
+        //Debug.Log("maxLevelCount: " + maxLevelCount);
 
         IsPlayingRandomLevel = false;
 
@@ -107,10 +109,6 @@ public class LevelController : MonoBehaviour
             successRate = FinalStagedBallCount / (float)GetCurrentLevel().TotalBalls;
         }
         catch { }
-
-        print("success rate: " + successRate);
-        print("FinalStagedBallCount: " + FinalStagedBallCount);
-        print("TotalBalls: " + GetCurrentLevel().TotalBalls);
 
         if (successRate >= 0.67f) { star = 3; }
         else if (successRate >= 0.34f && successRate < 0.67f) { star = 2; }

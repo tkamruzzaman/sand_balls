@@ -38,6 +38,6 @@ public class UIVibrationToggle : MonoBehaviour
     {
         GameService.Instance.VibrationManager.ToggleVibration();
 
-        GameService.Instance.VibrationManager.HapticLight();
+        GameService.Instance.VibrationManager.HapticHeavy();
     }
 }
