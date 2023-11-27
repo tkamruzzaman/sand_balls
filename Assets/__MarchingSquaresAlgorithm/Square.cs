@@ -41,14 +41,11 @@ public struct Square
         float topLerp = Mathf.InverseLerp(values[3], values[0], isoValue);
         topCenter = topLeft + (topRight - topLeft) * topLerp;
 
-
         float rightLerp = Mathf.InverseLerp(values[0], values[1], isoValue);
         rightCenter = topRight + (bottomRight - topRight) * rightLerp;
 
-
         float bottomLerp = Mathf.InverseLerp(values[2], values[1], isoValue);
         bottomCenter = bottomLeft + (bottomRight - bottomLeft) * bottomLerp;
-
 
         float leftLerp = Mathf.InverseLerp(values[3], values[2], isoValue);
         leftCenter = topLeft + (bottomLeft - topLeft) * leftLerp;
@@ -145,13 +142,12 @@ public struct Square
     private int GetConfigaration(float isoValue, float[] values)
     {
         int configaration = 0;
-        if (values[0] > isoValue) { configaration |= (1 << 0); }               //configaration += 1;
+        if (values[0] > isoValue) { configaration |= (1 << 0); }            //configaration += 1;
         if (values[1] > isoValue) { configaration |= (1 << 1); }            //configaration += 2;
-        if (values[2] > isoValue) { configaration |= (1 << 2); }             //configaration += 4;
-        if (values[3] > isoValue) { configaration |= (1 << 3); }                //configaration += 8;
+        if (values[2] > isoValue) { configaration |= (1 << 2); }            //configaration += 4;
+        if (values[3] > isoValue) { configaration |= (1 << 3); }            //configaration += 8;
         return configaration;
     }
-
 
     public readonly Vector3[] GetVertices() => vertices.ToArray();
 
