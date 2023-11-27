@@ -1,5 +1,7 @@
+//#define TESTING
+
 using System.Collections.Generic;
-#if UNITY_EDITOR
+#if TESTING && UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
@@ -58,7 +60,7 @@ public class TerrainGenerator : MonoBehaviour
 
         Vector2Int gridPosition = GetGridPositionFromWorldPosition(worldPosition);
 
-        bool shouldGenerate = false;
+        bool shouldGenerateMesh = false;
 
         for (int y = gridPosition.y - brushRadius; y <= gridPosition.y + brushRadius; y++)
         {
@@ -77,10 +79,10 @@ public class TerrainGenerator : MonoBehaviour
 
                 grid[currentGridPosition.x, currentGridPosition.y] -= factor;
 
-                shouldGenerate = true;
+                shouldGenerateMesh = true;
             }
         }
-        if (shouldGenerate)
+        if (shouldGenerateMesh)
         {
             GenerateMesh();
         }
@@ -93,11 +95,14 @@ public class TerrainGenerator : MonoBehaviour
 
         squareGrid.Update(grid);
 
-        mesh = new Mesh
-        {
-            vertices = squareGrid.GetVertices(),
-            triangles = squareGrid.GetTriangles()
-        };
+        mesh = new Mesh();
+
+        vertices = squareGrid.GetVertices();
+        triangles = squareGrid.GetTriangles();
+
+
+        mesh.SetVertices(vertices);
+        mesh.SetTriangles(triangles, 0);
 
         meshFilter.mesh = mesh;
 
@@ -116,29 +121,6 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        if (!EditorApplication.isPlaying) { return; }
-
-        Gizmos.color = Color.green;
-
-        for (int y = 0; y < grid.GetLength(1); y++)
-        {
-            for (int x = 0; x < grid.GetLength(0); x++)
-            {
-                Vector2 worldPosition = GetWorldPositionFromGridPosition(x, y);
-
-                worldPosition = transform.InverseTransformPoint(worldPosition);
-
-                Gizmos.DrawSphere(worldPosition, gridScale / 4);
-
-                Handles.Label(worldPosition + Vector2.up * gridScale / 3, grid[x, y].ToString());
-            }
-        }
-    }
-#endif
-
     private Vector2 GetWorldPositionFromGridPosition(int x, int y)
     {
         Vector2 worldPosition = new Vector2(x, y) * gridScale;
@@ -156,7 +138,7 @@ public class TerrainGenerator : MonoBehaviour
             y = Mathf.FloorToInt(worldPosition.y / gridScale + gridSize / 2 - gridScale / 2)
         };
 
-    private bool IsValidGridPosition(Vector2Int gridPosition) 
+    private bool IsValidGridPosition(Vector2Int gridPosition)
         => gridPosition.x >= 0 && gridPosition.x < gridSize
         && gridPosition.y >= 0 && gridPosition.y < gridSize;
 
@@ -164,4 +146,25 @@ public class TerrainGenerator : MonoBehaviour
     {
         InputManager.OnClick -= InputManager_OnClick;
     }
+
+#if TESTING && UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (!EditorApplication.isPlaying) { return; }
+
+        Gizmos.color = Color.green;
+
+        for (int y = 0; y < grid.GetLength(1); y++)
+        {
+            for (int x = 0; x < grid.GetLength(0); x++)
+            {
+                Vector2 worldPosition = GetWorldPositionFromGridPosition(x, y);
+                worldPosition = transform.InverseTransformPoint(worldPosition);
+                Gizmos.DrawSphere(worldPosition, gridScale / 4);
+                Handles.Label(worldPosition + Vector2.up * gridScale / 3, grid[x, y].ToString());
+            }
+        }
+    }
+#endif
+
 }

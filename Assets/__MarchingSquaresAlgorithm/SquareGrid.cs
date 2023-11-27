@@ -5,10 +5,10 @@ public struct SquareGrid
 {
     public Square[,] squares;
 
-    private List<Vector3> vertices;
-    private List<int> triangles;
+    private readonly List<Vector3> vertices;
+    private readonly List<int> triangles;
 
-    private float isoValue;
+    private readonly float isoValue;
 
     public SquareGrid(int size, float gridScale, float isoValue)
     {
@@ -32,7 +32,7 @@ public struct SquareGrid
         }
     }
 
-    public void Update(float[,] grid)
+    public readonly void Update(float[,] grid)
     {
         vertices.Clear();
         triangles.Clear();
@@ -56,21 +56,15 @@ public struct SquareGrid
 
                 vertices.AddRange(currentSquare.GetVertices());
 
-
-                int[] currentSquareTriangles = currentSquare.GetTriangles();
-
-                for (int i = 0; i < currentSquareTriangles.Length; i++)
-                {
-                    currentSquareTriangles[i] += triangleStartIndex;
-                }
-                triangles.AddRange(currentSquareTriangles);
-
-                triangleStartIndex += currentSquare.GetVertices().Length;
+                triangles.AddRange(currentSquare.UpdateAndGetTriangles(triangleStartIndex));
+                
+                triangleStartIndex += currentSquare.GetVertices().Count;
             }
         }
     }
 
-    public Vector3[] GetVertices() => vertices.ToArray();
+    public readonly List<Vector3> GetVertices() => vertices;
 
-    public int[] GetTriangles() => triangles.ToArray();
+    public readonly List<int> GetTriangles() => triangles;
+
 }
