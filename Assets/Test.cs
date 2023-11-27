@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -38,6 +39,10 @@ public class Test : MonoBehaviour
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
 
+    [Header("Grid Data")]
+    [SerializeField] private int gridSize;
+    [SerializeField] private float gridScale;
+
     private void Awake()
     {
         meshFilter = GetComponent<MeshFilter>();
@@ -46,6 +51,7 @@ public class Test : MonoBehaviour
 
     private void Start()
     {
+        
         topRight = Vector2.one / 2;
         bottomRight = topRight + Vector2.down;
         bottomLeft = bottomRight + Vector2.left;
@@ -55,6 +61,7 @@ public class Test : MonoBehaviour
         bottomCenter = (bottomRight + bottomLeft) / 2;
         leftCenter = (bottomLeft + topLeft) / 2;
         topCenter = (topLeft + topRight) / 2;
+        
 
         Shader shader = Shader.Find("Diffuse");
         Material material = new(shader);
@@ -63,11 +70,12 @@ public class Test : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log($"Configaration: {Convert.ToString(GetConfigaration(), toBase: 2).PadLeft(4, '0'),4}");
+        //Debug.Log($"Configaration: {Convert.ToString(GetConfigaration(), toBase: 2).PadLeft(4, '0'),4}");
         
         CreateMesh();
     }
 
+    /*
     private void Interpolate() 
     {
         float topLerp = Mathf.InverseLerp(topLeftValue, topRightValue, isoValue);
@@ -171,20 +179,27 @@ public class Test : MonoBehaviour
         if (topLeftValue > isoValue) { configaration |= (1 << 3); }                //configaration += 8;
         return configaration;
     }
+    */
 
     private void CreateMesh()
     {
         vertices.Clear();
         triangles.Clear();
 
-        Interpolate();
+        Square square = new Square(Vector3.zero, gridScale);
 
-        Triangulate(GetConfigaration());
+        square.Triangulate(isoValue, new float[] 
+        {
+            topRightValue,
+            bottomRightValue,
+            bottomLeftValue,
+            topLeftValue
+        });
 
         Mesh mesh = new()
         {
-            vertices = vertices.ToArray(),
-            triangles = triangles.ToArray()
+            vertices = square.GetVertices().ToArray(),
+            triangles = square.GetTriangles().ToArray()
         };
         meshFilter.mesh = mesh;
     }

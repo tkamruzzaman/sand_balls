@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -7,22 +8,36 @@ using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
+    [Header("Brush Settings")]
+    [SerializeField] private int brushRadius;
+    [SerializeField] private float brushStrength;
+
+    [Header("Grid Data")]
     [SerializeField] private int gridSize;
     [SerializeField] private float gridScale;
+    [SerializeField] private float isoValue;
+    
+    private SquareGrid squareGrid;
     private float[,] grid;
+
 
     private void Start()
     {
         InputManager.OnClick += InputManager_OnClick;
         grid = new float[gridSize, gridSize];
 
+        float thresholdValue = 0.1f;
         for (int y = 0; y < gridSize; y++)
         {
             for (int x = 0; x < gridSize; x++)
             {
-                grid[x, y] = Random.Range(0f, 2f);
+                grid[x, y] = isoValue + thresholdValue;
             }
         }
+        
+        squareGrid = new SquareGrid(gridSize-1, gridScale, isoValue);
+
+        GenerateMesh();
     }
 
     private void InputManager_OnClick(object sender, Vector3 worldPosition)
@@ -32,9 +47,44 @@ public class TerrainGenerator : MonoBehaviour
 
         Vector2Int gridPosition = GetGridPositionFromWorldPosition(worldPosition);
 
-        if(!IsValidGridPosition(gridPosition)) { Debug.LogWarning("Invalid Grid Position!"); return; }
+        for (int y = gridPosition.y - brushRadius;y <= gridPosition.y + brushRadius; y++)
+        {
+            for(int x = gridPosition.x - brushRadius; x <= gridPosition.x + brushRadius; x++)
+            {
+                Vector2Int currentGridPosition = new(x, y);
 
-        grid[gridPosition.x, gridPosition.y] = 0;
+                if (!IsValidGridPosition(currentGridPosition))
+                {
+                    Debug.LogWarning("Invalid Grid Position!");
+                    continue;
+                }
+
+                grid[currentGridPosition.x, currentGridPosition.y] -= brushStrength;
+            }
+        }
+
+       GenerateMesh();
+    }
+
+    private List<Vector3> vertices = new();
+    private List<int> triangles = new();
+  [SerializeField]  private MeshFilter meshFilter;
+    private MeshRenderer meshRenderer;
+
+
+    private void GenerateMesh()
+    {
+        vertices.Clear();
+        triangles.Clear();
+
+        squareGrid.Update(grid);
+
+        Mesh mesh = new()
+        {
+            vertices = squareGrid.GetVertices(),
+            triangles = squareGrid.GetTriangles()
+        };
+        meshFilter.mesh = mesh;
     }
 
 #if UNITY_EDITOR

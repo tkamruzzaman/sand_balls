@@ -18,9 +18,10 @@ public class InputManager : MonoBehaviour
         else if (Input.GetMouseButton(0))
         {
             Clicking();
-        }else if (Input.GetMouseButtonUp(0))
+        }
+        else if (Input.GetMouseButtonUp(0))
         {
-            isClicking= false;
+            isClicking = false;
         }
     }
 
@@ -29,7 +30,7 @@ public class InputManager : MonoBehaviour
         int maxRaycastDistance = 50;
         Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, maxRaycastDistance);
 
-        if(hit.collider == null) { return; }
+        if (hit.collider == null) { return; }
 
         OnClick?.Invoke(this, hit.point);
     }
