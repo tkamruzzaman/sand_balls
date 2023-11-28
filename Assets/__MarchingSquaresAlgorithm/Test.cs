@@ -22,15 +22,16 @@ public class Test : MonoBehaviour
     Vector2 topCenter;
 
     [Space]
-    //[Range(0f, 20f)] 
+    [Range(0f, 1f)] 
     [SerializeField] private float topRightValue;
-    //[Range(0f, 20f)] 
+    [Range(0f, 1f)] 
     [SerializeField] private float bottomRightValue;
-    //[Range(0f, 20f)] 
+    [Range(0f, 1f)] 
     [SerializeField] private float bottomLeftValue;
-    //[Range(0f, 20f)] 
+    [Range(0f, 1f)] 
     [SerializeField] private float topLeftValue;
     [Space]
+    [Range(0.5f, 0.9f)]
     [SerializeField] private float isoValue;
 
     private List<Vector3> vertices = new();

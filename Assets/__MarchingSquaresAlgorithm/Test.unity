@@ -296,7 +296,7 @@ MonoBehaviour:
   bottomRightValue: 0
   bottomLeftValue: 0
   topLeftValue: 0
-  isoValue: 1.5
+  isoValue: 0.9
   gridSize: 0
   gridScale: 1
 --- !u!4 &841719602
@@ -834,7 +834,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &2146754830
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -864,7 +864,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2146754829}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -986,7 +986,7 @@ SceneRoots:
   - {fileID: 441880275}
   - {fileID: 1291323442}
   - {fileID: 841719602}
-  - {fileID: 970686316}
   - {fileID: 2146754833}
+  - {fileID: 970686316}
   - {fileID: 487157281}
   - {fileID: 2065436497}

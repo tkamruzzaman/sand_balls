@@ -18,7 +18,7 @@ public class BallActiveState : BallBaseState
     {
         if (collision.gameObject.layer != PhysicsLayers.Obstacle) { return; }
 
-        GameService.Instance.SoundManager.PlaySound(GameService.Instance.SoundManager.ballAudioClip);
+        GameService.Instance.SoundManager.PlaySound(GameService.Instance.SoundManager.ballAudioClip, 0.25f);
         GameService.Instance.VibrationManager.HapticMedium();
     }
 }

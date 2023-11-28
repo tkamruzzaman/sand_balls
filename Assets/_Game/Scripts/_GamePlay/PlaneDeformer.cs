@@ -47,7 +47,7 @@ public class PlaneDeformer : MonoBehaviour
             m_Mesh.vertices = m_Verts;
             m_MeshCollider.sharedMesh = m_Mesh;
 
-            GameService.Instance.SoundManager.PlaySound(GameService.Instance.SoundManager.sandAudioClip, 0.25f);
+            GameService.Instance.SoundManager.PlaySound(GameService.Instance.SoundManager.sandAudioClip, 0.05f);
             GameService.Instance.VibrationManager.HapticLight();
 
             if (m_GameManager.isToAddCircle)

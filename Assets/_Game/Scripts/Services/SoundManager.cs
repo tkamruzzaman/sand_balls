@@ -58,7 +58,7 @@ namespace Service
             }
         }
 
-        public void PlaySound(AudioClip audioClip, float volume = 1.0f)
+        public void PlaySound(AudioClip audioClip, float volume = 0.5f)
         {
             if (isSoundOn && audioClip != null)
             {

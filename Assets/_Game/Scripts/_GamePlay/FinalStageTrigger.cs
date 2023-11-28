@@ -20,9 +20,7 @@ public class FinalStageTrigger : MonoBehaviour
     {
         if (other.gameObject.layer != PhysicsLayers.Ball) { return; }
         if (!other.CompareTag("Active")) { return; }
-
-        Ball ball = other.GetComponent<Ball>();
-        if (ball == null) { return; }
+        if (!other.TryGetComponent<Ball>(out Ball ball)) { return; }
 
         ball.isEnteredFinalStage = true;
 

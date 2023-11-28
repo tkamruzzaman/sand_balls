@@ -59,4 +59,9 @@ public class Ball : MonoBehaviour
         ballRenderer.material.SetColor("_Color", Color.white);
         ballTailRenderer.material.SetColor("_Color", Color.white);
     }
+
+    public void DeactiveTrail()
+    {
+        ballTailRenderer.gameObject.SetActive(false);
+    }
 }

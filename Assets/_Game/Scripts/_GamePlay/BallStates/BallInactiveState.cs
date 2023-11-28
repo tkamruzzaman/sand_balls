@@ -18,7 +18,7 @@ public class BallInactiveState : BallBaseState
 
         ball.TransitionToState(ball.activeState);
 
-        GameService.Instance.SoundManager.PlaySound(GameService.Instance.SoundManager.ballAudioClip);
+        GameService.Instance.SoundManager.PlaySound(GameService.Instance.SoundManager.ballAudioClip, 0.25f);
         GameService.Instance.VibrationManager.HapticSoft();
     }
 }

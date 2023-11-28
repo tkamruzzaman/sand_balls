@@ -84,7 +84,7 @@ public class LevelController : MonoBehaviour
 
     public void CheckToUnlockLevel(bool winStatus, bool isSkipedLevelWithAd = false)
     {
-        Debug.Log("............winStatus.......... " + winStatus);
+        //Debug.Log("............winStatus.......... " + winStatus);
         //Debug.Log("............isSkipedLevelWithAd.......... " + isSkipedLevelWithAd);
         if (!winStatus && !isSkipedLevelWithAd) { return; }
         UnlockLevel();

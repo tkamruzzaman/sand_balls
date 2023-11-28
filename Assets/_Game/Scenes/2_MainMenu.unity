@@ -350,7 +350,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Sand Ball Demo
+  m_text: Sand Ball
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1652513f12e6a4991ac52bcc66ebe62b, type: 2}
   m_sharedMaterial: {fileID: -3368534545351088213, guid: 1652513f12e6a4991ac52bcc66ebe62b, type: 2}

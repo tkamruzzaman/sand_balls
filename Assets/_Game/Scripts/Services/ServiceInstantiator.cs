@@ -1,9 +1,10 @@
+using UnityEditor;
 using UnityEngine;
 
 public class ServiceInstantiator : MonoBehaviour
 {
     [SerializeField] private GameObject m_ServiceObject;
-    private static bool isServiceInstantiated;
+    private bool isServiceInstantiated;
 
     private void Awake()
     {
